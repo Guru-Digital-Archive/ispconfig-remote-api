@@ -1,5 +1,5 @@
 {
-    "name": "GDM/ISPConfig-SoapClient",
+    "name": "gdm/ispconfig-soap-client",
     "description": "A simple wrapper around ISPConfigs Remote API using Soap",
     "authors": [
         {
