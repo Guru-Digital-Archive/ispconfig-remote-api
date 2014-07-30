@@ -8,7 +8,7 @@ class SoapClient {
      *
      * @var string Url to ISP configs SOAP remote API ( usually https://your-ip:8080/remote/index.php )
      */
-    private $ispConfigSoapLocation = 'https://vs1.gdmedia.tv:8080/remote/index.php';
+    private $ispConfigSoapLocation = '';
 
     /**
      *
