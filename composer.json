@@ -1,0 +1,16 @@
+{
+    "name": "GDM/ISPConfig-SoapClient",
+    "description": "A simple wrapper around ISPConfigs Remote API using Soap",
+    "authors": [
+        {
+            "name": "Corey Sewell",
+            "email": "corey@gdmedia.tv"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "GDM": "./"
+        }
+
+    }
+}
