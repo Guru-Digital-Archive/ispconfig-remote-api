@@ -17,4 +17,8 @@ class DomainStatus {
         $this->exists = $exists;
     }
 
+    public function __toString() {
+        return $this->domain . " " . ($this->exists ? "true" : "false");
+    }
+
 }

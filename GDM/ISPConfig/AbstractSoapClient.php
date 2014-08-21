@@ -2,7 +2,7 @@
 
 namespace GDM\ISPConfig;
 
-abstract class AbstractSoapClient {
+abstract class AbstractSoapClient implements SoapClientInterface {
 
     /**
      *
@@ -112,16 +112,16 @@ abstract class AbstractSoapClient {
 
     public function getAllClients($update = false) {
         if (empty($this->clients) || $update) {
-            $clientIds = $this->getAllClientIds();
+            $clientIds = $this->clientGetAll();
             // wait for 2 seconds
             usleep(100000);
             foreach ($clientIds as $i => $clientId) {
                 if ($i % 20 == 0) {
                     usleep(100000);
                 }
-                $client = $this->getClientById($clientId);
+                $client = $this->clientGet($clientId);
                 if ($client !== false) {
-                    $this->clients[] = $this->getClientById($clientId);
+                    $this->clients[] = $client;
                 } else {
                     echo "$clientId failed!<br/>";
                 }
@@ -131,23 +131,15 @@ abstract class AbstractSoapClient {
     }
 
     public function userNameExits($usernamesToCheck) {
-        $usernamesToCheck = is_array($usernamesToCheck) ? $usernamesToCheck : array($usernamesToCheck);
-        $reservedUsers    = array("admin", "administrator", "user", "test", "demo");
-        $usernames        = array_merge($reservedUsers, array_map(function($c) {
-                    return strtolower($c['username']);
-                }, $this->getAllClients()
-        ));
+        $args = func_get_args();
+        if (count($args > 1)) {
+            $usernamesToCheck = $args[1];
+        }
 
-        $result = array();
+        $usernamesToCheck = is_array($usernamesToCheck) ? $usernamesToCheck : array($usernamesToCheck);
+        $result           = array();
         foreach ($usernamesToCheck as $username) {
-            $obg           = new \stdClass();
-            $obg->username = strtolower(trim($username));
-            if (in_array($obg->username, $usernames)) {
-                $obg->exists = 1;
-            } else {
-                $obg->exists = 0;
-            }
-            $result[] = $obg;
+            $result[] = UsernameStatus::create($username, $this->clientGetByUsername($username) ? 1 : 0);
         }
         return $result;
     }
@@ -195,18 +187,27 @@ abstract class AbstractSoapClient {
     public function makeCall($function) {
         $args = func_get_args();
         array_shift($args);
-        if (method_exists($this, $function)) {
-            try {
-                $result = call_user_func_array(array($this, $function), $args);
-            }
-            catch (\Exception $exc) {
-                $result              = false;
-                $this->lastException = $exc;
-            }
-        } else {
-            throw new Exception("Command " . $function . " not found");
+        try {
+            $result = call_user_func_array(array($this->soapClient, $function), $args);
+        }
+        catch (\Exception $exc) {
+            $result              = false;
+            $this->lastException = $exc;
         }
         return $result;
+    }
+
+    public function createSite($serverId, $domain, $dbname, $dbuser, $dbpass = null) {
+        if (!is_int($serverId)) {
+            $server = $this->serverGetServeridByName($serverId);
+            if (isset($server[0]['server_id'])) {
+                $serverId = $server[0]['server_id'];
+            } else {
+                throw new \InvalidArgumentException("Unable to find the server " . $serverId);
+            }
+        }
+
+        return array();
     }
 
 }

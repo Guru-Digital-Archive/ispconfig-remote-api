@@ -12,7 +12,7 @@ class SoapClient extends AbstractSoapClient {
         return $this->makeCall("logout", $this->getSessionId());
     }
 
-    public function serverGet($serverId, $section) {
+    public function serverGet($serverId, $section = "") {
         return $this->makeCall("server_get", $this->getSessionId(), $serverId, $section);
     }
 
@@ -529,20 +529,49 @@ class SoapClient extends AbstractSoapClient {
         return $this->makeCall("sites_web_domain_get", $this->getSessionId(), $primaryId);
     }
 
-    public function sitesWebDomainAdd($clientId, $domain, $serverId = 1, $ipAddress = "*", $subdomain = "www", $hd_quota = "-1", $traffic_quota = "-1", $allow_override = "All", $pm_process_idle_timeout = "10", $pm_max_requests = "0", $pm_max_children = "10", $pm_start_servers = "2", $pm_max_spare_servers = "5", $errordocs = 1, $php = "php-fpm", $stats_type = "webalizer", $pm = "dynamic", $active = "y", $suexec = "y", $vhost_type = "name", $type = "vhost", $fastcgi_php_version = "PHP 5.4.30:/etc/init.d/php-5.4.30-fpm:/opt/phpfarm/inst/php-5.4.30/lib/:/opt/phpfarm/inst/php-5.4.30/etc/pool.d/", $readonly = 0) {
+    /**
+     *
+     * @param type $clientId
+     * @param type $domain
+     * @param type $serverId
+     * @param type $ipAddress
+     * @param type $subdomain
+     * @param type $hd_quota
+     * @param type $traffic_quota
+     * @param type $allow_override
+     * @param type $pm_max_children
+     * @param type $pm_start_servers
+     * @param type $pm_min_spare_servers
+     * @param type $pm_max_spare_servers
+     * @param type $pm_process_idle_timeout
+     * @param type $pm_max_requests
+     * @param type $errordocs
+     * @param type $php
+     * @param type $stats_type
+     * @param type $pm
+     * @param type $active
+     * @param type $suexec
+     * @param type $vhost_type
+     * @param type $type
+     * @param type $fastcgi_php_version
+     * @param type $readonly
+     * @return type
+     */
+    public function sitesWebDomainAdd($clientId, $domain, $serverId = 1, $ipAddress = "*", $subdomain = "www", $hd_quota = "-1", $traffic_quota = "-1", $allow_override = "All", $pm_max_children = "10", $pm_start_servers = "2", $pm_min_spare_servers = "1", $pm_max_spare_servers = "5", $pm_process_idle_timeout = "10", $pm_max_requests = "0", $errordocs = "1", $php = "fast-cgi", $stats_type = "webalizer", $pm = "dynamic", $active = "y", $suexec = "y", $vhost_type = "name", $type = "vhost", $fastcgi_php_version = "", $readonly = "0") {
         $params = array(
+            "domain"                  => $domain,
             "server_id"               => $serverId,
             "ip_address"              => $ipAddress,
-            "domain"                  => $domain,
             "subdomain"               => $subdomain,
             "hd_quota"                => $hd_quota,
             "traffic_quota"           => $traffic_quota,
             "allow_override"          => $allow_override,
-            "pm_process_idle_timeout" => $pm_process_idle_timeout,
-            "pm_max_requests"         => $pm_max_requests,
             "pm_max_children"         => $pm_max_children,
             "pm_start_servers"        => $pm_start_servers,
+            "pm_min_spare_servers"    => $pm_min_spare_servers,
             "pm_max_spare_servers"    => $pm_max_spare_servers,
+            "pm_process_idle_timeout" => $pm_process_idle_timeout,
+            "pm_max_requests"         => $pm_max_requests,
             "errordocs"               => $errordocs,
             "php"                     => $php,
             "stats_type"              => $stats_type,
