@@ -102,7 +102,10 @@ abstract class AbstractSoapClient implements SoapClientInterface {
         ));
         $this->sessionId             = $this->login($this->ispConfigUser, $this->ispConfigPassword);
         if (!$this->sessionId) {
-            throw new \Exception("Login failed");
+            if ($this->lastException){
+                throw $this->lastException;
+            }
+            throw new \Exception("Login failed ");
         }
     }
 
