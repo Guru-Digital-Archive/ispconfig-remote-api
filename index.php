@@ -6,7 +6,7 @@ $cp       = new \GDM\ISPConfig\SoapClient('https://127.0.0.1:8080/remote/index.p
 $clientId = $cp->clientAdd("My Client", "My Clients Company", "myclient", "myclientspassword", "contact@myclient.com", "000000");
 $siteId   = false;
 if ($clientId) {
-    $siteId = $cp->createSite($clientId, "myclient.com", "255.255.255.1");
+    $siteId = $cp->sitesWebDomainAdd($clientId, "myclient.com", "255.255.255.1");
 } else {
     echo "Failed to create client " . $cp->getLastException()->getMessage();
 }
