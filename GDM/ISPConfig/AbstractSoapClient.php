@@ -92,13 +92,14 @@ abstract class AbstractSoapClient implements SoapClientInterface {
      * @param string $ispConfigUser Username to login to ISPConfig with ( Create one in ISPConfigs web interface under System > Remote Users )
      * @param string $ispConfigPassword Password to login to ISPConfig with ( Create/Update in ISPConfigs web interface under System > Remote Users )
      */
-    public function __construct($ispConfigSoapLocation, $ispConfigUser, $ispConfigPassword) {
+    public function __construct($ispConfigSoapLocation, $ispConfigUser, $ispConfigPassword,$context=null) {
         $this->ispConfigUser         = $ispConfigUser;
         $this->ispConfigPassword     = $ispConfigPassword;
         $this->ispConfigSoapLocation = $ispConfigSoapLocation;
         $this->soapClient            = new \SoapClient(null, array(
             'location' => $this->ispConfigSoapLocation,
-            'uri'      => $this->ispConfigSoapLocation
+            'uri'      => $this->ispConfigSoapLocation,
+            'stream_context' => $context
         ));
         $this->sessionId             = $this->login($this->ispConfigUser, $this->ispConfigPassword);
         if (!$this->sessionId) {
@@ -113,17 +114,19 @@ abstract class AbstractSoapClient implements SoapClientInterface {
     public function getAllClients($update = false) {
         if (empty($this->clients) || $update) {
             $clientIds = $this->clientGetAll();
-            // wait for 2 seconds
-            usleep(100000);
-            foreach ($clientIds as $i => $clientId) {
-                if ($i % 20 == 0) {
-                    usleep(100000);
-                }
-                $client = $this->clientGet($clientId);
-                if ($client !== false) {
-                    $this->clients[] = $client;
-                } else {
-                    echo "$clientId failed!<br/>";
+            if ($clientIds){
+                // wait for 2 seconds
+                usleep(100000);
+                foreach ($clientIds as $i => $clientId) {
+                    if ($i % 20 == 0) {
+                        usleep(100000);
+                    }
+                    $client = $this->clientGet($clientId);
+                    if ($client !== false) {
+                        $this->clients[] = $client;
+                    } else {
+                        echo "$clientId failed!<br/>";
+                    }
                 }
             }
         }
