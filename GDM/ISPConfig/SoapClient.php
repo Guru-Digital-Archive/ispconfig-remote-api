@@ -555,9 +555,11 @@ class SoapClient extends AbstractSoapClient {
      * @param type $type
      * @param type $fastcgi_php_version
      * @param type $readonly
+     * @param type $http_host
+     * @param type $https_host
      * @return type
      */
-    public function sitesWebDomainAdd($clientId, $domain, $serverId = 1, $ipAddress = "*", $subdomain = "www", $hd_quota = "-1", $traffic_quota = "-1", $allow_override = "All", $pm_max_children = "10", $pm_start_servers = "2", $pm_min_spare_servers = "1", $pm_max_spare_servers = "5", $pm_process_idle_timeout = "10", $pm_max_requests = "0", $errordocs = "1", $php = "fast-cgi", $stats_type = "webalizer", $pm = "dynamic", $active = "y", $suexec = "y", $vhost_type = "name", $type = "vhost", $fastcgi_php_version = "", $readonly = "0") {
+    public function sitesWebDomainAdd($clientId, $domain, $serverId = 1, $ipAddress = "*", $subdomain = "www", $hd_quota = "-1", $traffic_quota = "-1", $allow_override = "All", $pm_max_children = "10", $pm_start_servers = "2", $pm_min_spare_servers = "1", $pm_max_spare_servers = "5", $pm_process_idle_timeout = "10", $pm_max_requests = "0", $errordocs = "1", $php = "fast-cgi", $stats_type = "webalizer", $pm = "dynamic", $active = "y", $suexec = "y", $vhost_type = "name", $type = "vhost", $fastcgi_php_version = "", $readonly = "0", $http_host = 80, $https_host = 443) {
         $params = array(
             "domain"                  => $domain,
             "server_id"               => $serverId,
@@ -580,7 +582,9 @@ class SoapClient extends AbstractSoapClient {
             "suexec"                  => $suexec,
             "vhost_type"              => $vhost_type,
             "type"                    => $type,
-            "fastcgi_php_version"     => $fastcgi_php_version
+            "fastcgi_php_version"     => $fastcgi_php_version,
+            "http_host"               => $http_host,
+            "https_host"              => $https_host
         );
         return $this->makeCall("sites_web_domain_add", $this->getSessionId(), $clientId, $params, $readonly);
     }
