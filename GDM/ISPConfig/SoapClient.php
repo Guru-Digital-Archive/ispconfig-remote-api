@@ -584,7 +584,9 @@ class SoapClient extends AbstractSoapClient {
             "type"                    => $type,
             "fastcgi_php_version"     => $fastcgi_php_version,
             "http_host"               => $http_host,
-            "https_host"              => $https_host
+            "https_host"              => $https_host,
+            "http_port"               =>"80",
+            "https_port"              =>"443"
         );
         return $this->makeCall("sites_web_domain_add", $this->getSessionId(), $clientId, $params, $readonly);
     }
