@@ -1,5 +1,4 @@
 <?php
-
 namespace GDM\ISPConfig;
 
 class SoapClient extends AbstractSoapClient
@@ -673,39 +672,67 @@ class SoapClient extends AbstractSoapClient
      * @param type $type
      * @param type $fastcgi_php_version
      * @param type $readonly
-     * @param type $http_host
-     * @param type $https_host
+     * @param type $http_port
+     * @param type $https_port
      * @return type
      */
-    public function sitesWebDomainAdd($clientId, $domain, $serverId = 1, $ipAddress = '*', $subdomain = 'www', $hd_quota = '-1', $traffic_quota = '-1', $allow_override = 'All', $pm_max_children = '10', $pm_start_servers = '2', $pm_min_spare_servers = '1', $pm_max_spare_servers = '5', $pm_process_idle_timeout = '10', $pm_max_requests = '0', $errordocs = '1', $php = 'fast-cgi', $stats_type = 'webalizer', $pm = 'dynamic', $active = 'y', $suexec = 'y', $vhost_type = 'name', $type = 'vhost', $fastcgi_php_version = '', $readonly = '0', $http_host = 80, $https_host = 443)
+    public function sitesWebDomainAdd($clientId, $domain, $serverId = 1, $ipAddress = '*', $subdomain = 'www', $hd_quota = '-1', $traffic_quota = '-1', $allow_override = 'All', $pm_max_children = '10', $pm_start_servers = '2', $pm_min_spare_servers = '1', $pm_max_spare_servers = '5', $pm_process_idle_timeout = '10', $pm_max_requests = '0', $errordocs = '1', $php = 'fast-cgi', $stats_type = 'webalizer', $pm = 'dynamic', $active = 'y', $suexec = 'y', $vhost_type = 'name', $type = 'vhost', $fastcgi_php_version = '', $readonly = '0', $http_port = 80, $https_port = 443, $apache_directives = '')
     {
         $params = [
-            'domain'                  => $domain,
             'server_id'               => $serverId,
             'ip_address'              => $ipAddress,
-            'subdomain'               => $subdomain,
+            'domain'                  => $domain,
+            'type'                    => $type,
+//            'parent_domain_id'        => 0,
+//            'vhost_type'              => 'name',
+            'vhost_type'              => $vhost_type,
             'hd_quota'                => $hd_quota,
             'traffic_quota'           => $traffic_quota,
+//            'cgi'                     => 'y',
+//            'ssi'                     => 'y',
+//            'suexec'                  => 'y',
+            'errordocs'               => $errordocs,
+//            'is_subdomainwww'         => 1,
+            'subdomain'               => $subdomain,
+            'php'                     => $php,
+//            'ruby'                    => 'n',
+//            'redirect_type'           => '',
+//            'redirect_path'           => '',
+//            'ssl'                     => 'n',
+//            'ssl_state'               => '',
+//            'ssl_locality'            => '',
+//            'ssl_organisation'        => '',
+//            'ssl_organisation_unit'   => '',
+//            'ssl_country'             => '',
+//            'ssl_domain'              => '',
+//            'ssl_request'             => '',
+//            'ssl_key'                 => '',
+//            'ssl_cert'                => '',
+//            'ssl_bundle'              => '',
+//            'ssl_action'              => '',
+//            'stats_password'          => '',
+            'stats_type'              => $stats_type,
             'allow_override'          => $allow_override,
+            'apache_directives'       => $apache_directives,
+//            'php_open_basedir'        => '/',
+//            'pm_max_requests'         => 0,
+//            'pm_process_idle_timeout' => 10,
+            'pm'                      => $pm,
             'pm_max_children'         => $pm_max_children,
             'pm_start_servers'        => $pm_start_servers,
             'pm_min_spare_servers'    => $pm_min_spare_servers,
             'pm_max_spare_servers'    => $pm_max_spare_servers,
             'pm_process_idle_timeout' => $pm_process_idle_timeout,
             'pm_max_requests'         => $pm_max_requests,
-            'errordocs'               => $errordocs,
-            'php'                     => $php,
-            'stats_type'              => $stats_type,
-            'pm'                      => $pm,
-            'active'                  => $active,
+//            'custom_php_ini'          => '',
+//            'backup_interval'         => '',
+//            'backup_copies'           => 1,
+            'active'                  => 'y',
+//            'traffic_quota_lock'      => 'n'
             'suexec'                  => $suexec,
-            'vhost_type'              => $vhost_type,
-            'type'                    => $type,
             'fastcgi_php_version'     => $fastcgi_php_version,
-            'http_host'               => $http_host,
-            'https_host'              => $https_host,
-            'http_port'               => '80',
-            'https_port'              => '443'
+            'http_port'               => $http_port,
+            'https_port'              => $https_port,
         ];
         return $this->makeCall('sites_web_domain_add', $this->getSessionId(), $clientId, $params, $readonly);
     }
