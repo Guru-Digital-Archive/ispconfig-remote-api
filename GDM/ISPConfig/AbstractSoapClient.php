@@ -1,10 +1,8 @@
 <?php
-
 namespace GDM\ISPConfig;
 
 abstract class AbstractSoapClient implements SoapClientInterface
 {
-
     /**
      *
      * @var string Url to ISP configs SOAP remote API ( usually https://your-ip:8080/remote/index.php )
@@ -84,7 +82,7 @@ abstract class AbstractSoapClient implements SoapClientInterface
      */
     public function getLastException()
     {
-        return $this->lastException ? : new \Exception('');
+        return $this->lastException ?: new \Exception('');
     }
 
     /**
@@ -95,7 +93,7 @@ abstract class AbstractSoapClient implements SoapClientInterface
      * @param string $ispConfigUser Username to login to ISPConfig with ( Create one in ISPConfigs web interface under System > Remote Users )
      * @param string $ispConfigPassword Password to login to ISPConfig with ( Create/Update in ISPConfigs web interface under System > Remote Users )
      */
-    public function __construct($ispConfigSoapLocation, $ispConfigUser, $ispConfigPassword, $context=null)
+    public function __construct($ispConfigSoapLocation, $ispConfigUser, $ispConfigPassword, $context = null)
     {
         $this->ispConfigUser         = $ispConfigUser;
         $this->ispConfigPassword     = $ispConfigPassword;
@@ -120,11 +118,8 @@ abstract class AbstractSoapClient implements SoapClientInterface
         if (empty($this->clients) || $update) {
             $clientIds = $this->clientGetAll();
             if ($clientIds) {
-                // wait for 2 seconds
-                usleep(100000);
                 foreach ($clientIds as $i => $clientId) {
                     if ($i % 20 == 0) {
-                        usleep(100000);
                     }
                     $client = $this->clientGet($clientId);
                     if ($client !== false) {
@@ -153,17 +148,6 @@ abstract class AbstractSoapClient implements SoapClientInterface
         return $result;
     }
 
-    public function getAllGroupIds()
-    {
-        $clientIds  = $this->getAllClientIds();
-        $groupIds   = [];
-        $groupIds[] = 0;
-        foreach ($clientIds as $clientId) {
-            $groupIds[] = $this->getClientGroupId($clientId);
-        }
-        return $groupIds;
-    }
-
     /**
      *
      * @param type $domainsToCheck
@@ -176,7 +160,7 @@ abstract class AbstractSoapClient implements SoapClientInterface
         $domains         = array_merge($reservedDomains, array_map(function ($s) {
             return $s['domain'];
         }, $this->getSites()
-                ), $this->getAllClients()
+            ), $this->getAllClients()
         );
         $result = [];
         foreach ($domainsToCheck as $domain) {

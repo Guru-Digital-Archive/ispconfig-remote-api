@@ -586,7 +586,7 @@ class SoapClient extends AbstractSoapClient
     public function sitesFtpUserAdd($clientId, $siteId, $userName, $password, $quotaSize = '-1', $active = 'y')
     {
         $result = false;
-        $site   = $this->getSite($siteId);
+        $site   = $this->sitesWebDomainGet($siteId);
         if ($site !== false) {
             $params = [
                 'server_id'        => $site['server_id'],
@@ -775,7 +775,7 @@ class SoapClient extends AbstractSoapClient
     public function sitesWebAliasdomainAdd($clientId, $siteId, $alias)
     {
         $result = false;
-        $site   = $this->getSite($siteId);
+        $site   = $this->sitesWebDomainGet($siteId);
         if ($site !== false) {
             $params = [
                 'server_id'        => $site['server_id'],
@@ -1363,5 +1363,24 @@ class SoapClient extends AbstractSoapClient
     public function openvzVmRestart($vmId)
     {
         return $this->makeCall('openvz_vm_restart', $this->getSessionId(), $vmId);
+    }
+
+    public function getAllGroupIds()
+    {
+        $clientIds  = $this->getAllClientIds();
+        $groupIds   = [];
+        $groupIds[] = 0;
+        foreach ($clientIds as $clientId) {
+            $groupIds[] = $this->getClientGroupId($clientId);
+        }
+        return $groupIds;
+    }
+
+    public function getAllClientIds($update = false)
+    {
+        if (empty($this->clientIds) || $update) {
+            $this->clientIds = $this->soapClient->clientGetAll($this->getSessionId());
+        }
+        return $this->clientIds;
     }
 }
