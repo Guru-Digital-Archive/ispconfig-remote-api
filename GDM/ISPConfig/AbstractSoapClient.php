@@ -2,7 +2,8 @@
 
 namespace GDM\ISPConfig;
 
-abstract class AbstractSoapClient implements SoapClientInterface {
+abstract class AbstractSoapClient implements SoapClientInterface
+{
 
     /**
      *
@@ -38,13 +39,13 @@ abstract class AbstractSoapClient implements SoapClientInterface {
      *
      * @var array Cache of client IDs
      */
-    public $clientIds = array();
+    public $clientIds = [];
 
     /**
      *
      * @var array Cache of clients
      */
-    public $clients = array();
+    public $clients = [];
 
     /**
      *
@@ -67,9 +68,10 @@ abstract class AbstractSoapClient implements SoapClientInterface {
      * @return string
      * @throws Exception
      */
-    public function getSessionId() {
+    public function getSessionId()
+    {
         if (!$this->sessionId) {
-            throw new Exception("Tried to call method when not logged in");
+            throw new Exception('Tried to call method when not logged in');
         }
         return $this->sessionId;
     }
@@ -80,8 +82,9 @@ abstract class AbstractSoapClient implements SoapClientInterface {
      *
      * @return \Exception
      */
-    public function getLastException() {
-        return $this->lastException ? : new \Exception("");
+    public function getLastException()
+    {
+        return $this->lastException ? : new \Exception('');
     }
 
     /**
@@ -92,18 +95,19 @@ abstract class AbstractSoapClient implements SoapClientInterface {
      * @param string $ispConfigUser Username to login to ISPConfig with ( Create one in ISPConfigs web interface under System > Remote Users )
      * @param string $ispConfigPassword Password to login to ISPConfig with ( Create/Update in ISPConfigs web interface under System > Remote Users )
      */
-    public function __construct($ispConfigSoapLocation, $ispConfigUser, $ispConfigPassword,$context=null) {
+    public function __construct($ispConfigSoapLocation, $ispConfigUser, $ispConfigPassword, $context=null)
+    {
         $this->ispConfigUser         = $ispConfigUser;
         $this->ispConfigPassword     = $ispConfigPassword;
         $this->ispConfigSoapLocation = $ispConfigSoapLocation;
-        $this->soapClient            = new \SoapClient(null, array(
-            'location' => $this->ispConfigSoapLocation,
-            'uri'      => $this->ispConfigSoapLocation,
+        $this->soapClient            = new \SoapClient(null, [
+            'location'       => $this->ispConfigSoapLocation,
+            'uri'            => $this->ispConfigSoapLocation,
             'stream_context' => $context
-        ));
+        ]);
         $this->sessionId             = $this->login($this->ispConfigUser, $this->ispConfigPassword);
         if (!$this->sessionId) {
-            throw new \Exception("Login failed: " . ($this->lastException ? $this->lastException->getMessage() : '' ));
+            throw new \Exception('Login failed: ' . ($this->lastException ? $this->lastException->getMessage() : ''));
         }
     }
 
@@ -111,10 +115,11 @@ abstract class AbstractSoapClient implements SoapClientInterface {
 
     abstract public function logout();
 
-    public function getAllClients($update = false) {
+    public function getAllClients($update = false)
+    {
         if (empty($this->clients) || $update) {
             $clientIds = $this->clientGetAll();
-            if ($clientIds){
+            if ($clientIds) {
                 // wait for 2 seconds
                 usleep(100000);
                 foreach ($clientIds as $i => $clientId) {
@@ -133,23 +138,25 @@ abstract class AbstractSoapClient implements SoapClientInterface {
         return $this->clients;
     }
 
-    public function userNameExits($usernamesToCheck) {
+    public function userNameExits($usernamesToCheck)
+    {
         $args = func_get_args();
         if (count($args > 1)) {
             $usernamesToCheck = $args[1];
         }
 
-        $usernamesToCheck = is_array($usernamesToCheck) ? $usernamesToCheck : array($usernamesToCheck);
-        $result           = array();
+        $usernamesToCheck = is_array($usernamesToCheck) ? $usernamesToCheck : [$usernamesToCheck];
+        $result           = [];
         foreach ($usernamesToCheck as $username) {
             $result[] = UsernameStatus::create($username, $this->clientGetByUsername($username) ? 1 : 0);
         }
         return $result;
     }
 
-    public function getAllGroupIds() {
+    public function getAllGroupIds()
+    {
         $clientIds  = $this->getAllClientIds();
-        $groupIds   = array();
+        $groupIds   = [];
         $groupIds[] = 0;
         foreach ($clientIds as $clientId) {
             $groupIds[] = $this->getClientGroupId($clientId);
@@ -162,15 +169,16 @@ abstract class AbstractSoapClient implements SoapClientInterface {
      * @param type $domainsToCheck
      * @return DomainStatus[]
      */
-    public function domainExists($domainsToCheck) {
-        $domainsToCheck  = is_array($domainsToCheck) ? $domainsToCheck : array($domainsToCheck);
-        $reservedDomains = array("test.gdmedia.tv");
-        $domains         = array_merge($reservedDomains, array_map(function($s) {
-                    return $s['domain'];
-                }, $this->getSites()
+    public function domainExists($domainsToCheck)
+    {
+        $domainsToCheck  = is_array($domainsToCheck) ? $domainsToCheck : [$domainsToCheck];
+        $reservedDomains = ['test.gdmedia.tv'];
+        $domains         = array_merge($reservedDomains, array_map(function ($s) {
+            return $s['domain'];
+        }, $this->getSites()
                 ), $this->getAllClients()
         );
-        $result = array();
+        $result = [];
         foreach ($domainsToCheck as $domain) {
             $domain   = strtolower(trim($domain));
             $result[] = DomainStatus::create($domain, in_array($domain, $domains) ? 1 : 0);
@@ -187,30 +195,30 @@ abstract class AbstractSoapClient implements SoapClientInterface {
      * @param type $param2 <p>Second remote param</p>
      * @return mixed The result of the remote function or false on failure. If an exception occurs false is returned and the exception can queried by getLastException.
      */
-    public function makeCall($function) {
+    public function makeCall($function)
+    {
         $args = func_get_args();
         array_shift($args);
         try {
-            $result = call_user_func_array(array($this->soapClient, $function), $args);
-        }
-        catch (\Exception $exc) {
+            $result = call_user_func_array([$this->soapClient, $function], $args);
+        } catch (\Exception $exc) {
             $result              = false;
             $this->lastException = $exc;
         }
         return $result;
     }
 
-    public function createSite($serverId, $domain, $dbname, $dbuser, $dbpass = null) {
+    public function createSite($serverId, $domain, $dbname, $dbuser, $dbpass = null)
+    {
         if (!is_int($serverId)) {
             $server = $this->serverGetServeridByName($serverId);
             if (isset($server[0]['server_id'])) {
                 $serverId = $server[0]['server_id'];
             } else {
-                throw new \InvalidArgumentException("Unable to find the server " . $serverId);
+                throw new \InvalidArgumentException('Unable to find the server ' . $serverId);
             }
         }
 
-        return array();
+        return [];
     }
-
 }

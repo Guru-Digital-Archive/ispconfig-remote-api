@@ -2,8 +2,8 @@
 
 namespace GDM\ISPConfig;
 
-interface SoapClientInterface {
-
+interface SoapClientInterface
+{
     public function login($username, $password);
 
     public function logout();
@@ -180,7 +180,7 @@ interface SoapClientInterface {
 
     public function clientGetGroupid($clientId);
 
-    public function clientAdd($contact_name, $company_name, $user_name, $password, $email, $telephone, $limit_client = 0, $web_php_options = array('no', 'fast-cgi', 'cgi', 'mod', 'suphp', 'php-fpm'), $ssh_chroot = array('no', 'jailkit'), $language = "en", $usertheme = "default", $country = "NZ", $resellerId = 0);
+    public function clientAdd($contact_name, $company_name, $user_name, $password, $email, $telephone, $limit_client = 0, $web_php_options = ['no', 'fast-cgi', 'cgi', 'mod', 'suphp', 'php-fpm'], $ssh_chroot = ['no', 'jailkit'], $language = 'en', $usertheme = 'default', $country = 'NZ', $resellerId = 0);
 
     public function clientUpdate($clientId, $resellerId, $params);
 
@@ -222,7 +222,7 @@ interface SoapClientInterface {
 
     public function sitesFtpUserGet($primaryId);
 
-    public function sitesFtpUserAdd($clientId, $siteId, $userName, $password, $quotaSize = "-1", $active = "y");
+    public function sitesFtpUserAdd($clientId, $siteId, $userName, $password, $quotaSize = '-1', $active = 'y');
 
     public function sitesFtpUserUpdate($clientId, $primaryId, $params);
 
@@ -240,7 +240,7 @@ interface SoapClientInterface {
 
     public function sitesWebDomainGet($primaryId);
 
-    public function sitesWebDomainAdd($clientId, $domain, $serverId = 1, $ipAddress = "*", $subdomain = "www", $hd_quota = "-1", $traffic_quota = "-1", $allow_override = "All", $pm_process_idle_timeout = "10", $pm_max_requests = "0", $pm_max_children = "10", $pm_start_servers = "2", $pm_max_spare_servers = "5", $errordocs = 1, $php = "php-fpm", $stats_type = "webalizer", $pm = "dynamic", $active = "y", $suexec = "y", $vhost_type = "name", $type = "vhost", $fastcgi_php_version = "PHP 5.4.30:/etc/init.d/php-5.4.30-fpm:/opt/phpfarm/inst/php-5.4.30/lib/:/opt/phpfarm/inst/php-5.4.30/etc/pool.d/", $readonly = 0);
+    public function sitesWebDomainAdd($clientId, $domain, $serverId = 1, $ipAddress = '*', $subdomain = 'www', $hd_quota = '-1', $traffic_quota = '-1', $allow_override = 'All', $pm_process_idle_timeout = '10', $pm_max_requests = '0', $pm_max_children = '10', $pm_start_servers = '2', $pm_max_spare_servers = '5', $errordocs = 1, $php = 'php-fpm', $stats_type = 'webalizer', $pm = 'dynamic', $active = 'y', $suexec = 'y', $vhost_type = 'name', $type = 'vhost', $fastcgi_php_version = 'PHP 5.4.30:/etc/init.d/php-5.4.30-fpm:/opt/phpfarm/inst/php-5.4.30/lib/:/opt/phpfarm/inst/php-5.4.30/etc/pool.d/', $readonly = 0);
 
     public function sitesWebDomainUpdate($clientId, $primaryId, $params);
 
