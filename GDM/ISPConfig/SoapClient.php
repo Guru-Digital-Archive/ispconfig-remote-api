@@ -1365,6 +1365,11 @@ class SoapClient extends AbstractSoapClient
         return $this->makeCall('openvz_vm_restart', $this->getSessionId(), $vmId);
     }
 
+    public function getJobqueueCount($serverId)
+    {
+        return $this->makeCall('monitor_jobqueue_count', $this->getSessionId(), $serverId);
+    }
+
     public function getAllGroupIds()
     {
         $clientIds  = $this->getAllClientIds();
