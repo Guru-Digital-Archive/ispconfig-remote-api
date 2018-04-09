@@ -13,6 +13,11 @@ class SoapClient extends AbstractSoapClient
         return $this->makeCall('logout', $this->getSessionId());
     }
 
+    public function monitorJobqueueCount($serverId)
+    {
+        return $this->makeCall('monitor_jobqueue_count', $this->getSessionId(), $serverId);
+    }
+
     public function serverGet($serverId, $section = '')
     {
         return $this->makeCall('server_get', $this->getSessionId(), $serverId, $section);
