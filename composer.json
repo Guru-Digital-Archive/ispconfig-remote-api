@@ -1,11 +1,11 @@
 {
-    "name": "gdm/ispconfig-soap-client",
+    "name": "dextar/ispconfig-soap-client",
     "description": "A simple wrapper around ISPConfigs Remote API using Soap",
     "version": "0.0.4",
     "authors": [
         {
-            "name": "Corey Sewell",
-            "email": "corey@gdmedia.tv"
+            "name": "Usman Ahmad",
+            "email": "usman.ahmad@gosign.de"
         }
     ],
     "autoload": {
