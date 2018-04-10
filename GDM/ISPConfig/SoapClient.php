@@ -646,6 +646,11 @@ class SoapClient extends AbstractSoapClient
         return $this->makeCall('sites_web_domain_get', $this->getSessionId(), $primaryId);
     }
 
+    public function sitesWebDomainGetAll($where)
+    {
+        return $this->makeCall('sites_web_domain_get', $this->getSessionId(), $where);
+    }
+
     /**
      *
      * @param type $clientId
@@ -1208,6 +1213,11 @@ class SoapClient extends AbstractSoapClient
     public function clientGetAll()
     {
         return $this->makeCall('client_get_all', $this->getSessionId());
+    }
+
+    public function clientGetAllWithData($where)
+    {
+        return $this->makeCall('client_get', $this->getSessionId(),['parent_client_id' => 0]);
     }
 
     public function clientChangePassword($clientId, $newPassword)
