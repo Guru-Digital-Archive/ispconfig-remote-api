@@ -1,7 +1,7 @@
 {
     "name": "dextar/ispconfig-soap-client",
     "description": "A simple wrapper around ISPConfigs Remote API using Soap",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "authors": [
         {
             "name": "Usman Ahmad",
