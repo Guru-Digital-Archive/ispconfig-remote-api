@@ -448,7 +448,7 @@ class SoapClient extends AbstractSoapClient
         return $this->makeCall('client_get_groupid', $this->getSessionId(), $clientId);
     }
 
-    public function clientAdd($contact_name, $company_name, $user_name, $password, $email, $telephone, $limit_client = 0, $web_php_options = ['no', 'fast-cgi', 'cgi', 'mod', 'suphp', 'php-fpm'], $ssh_chroot = ['no', 'jailkit'], $language = 'en', $usertheme = 'default', $country = 'NZ', $resellerId = 0)
+    public function clientAdd($contact_name, $company_name, $user_name, $password, $email, $telephone, $limit_client = 0, $web_php_options = ['no', 'fast-cgi', 'cgi', 'mod', 'suphp', 'php-fpm'], $ssh_chroot = ['no', 'jailkit'], $language = 'en', $usertheme = 'default', $country = 'NZ', $resellerId = 0, $template_master = 0)
     {
         $params = [
             'contact_name'    => $contact_name,
@@ -463,6 +463,7 @@ class SoapClient extends AbstractSoapClient
             'language'        => $language,
             'usertheme'       => $usertheme,
             'country'         => $country,
+            'template_master' => $template_master,
         ];
         return $this->makeCall('client_add', $this->getSessionId(), $resellerId, $params);
     }
